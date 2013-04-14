@@ -7,8 +7,8 @@ Prepared by Group M:
 1129105 - Dmytro Grygorenko 
 1129108 - Kateryna Zaslavska 
 
-It was done two parts: Task 1.1, Task 1.2 and additional Task.
-In order to pass all requirements of the lab, it was implemented three separate applications:
+It was done three parts: Task 1.1, Task 1.2 and additional Task.
+In order to pass all requirements of the lab, two separate applications were implemented:
 1. CreateIndexApp - creates inverted index for TF*IDF-like algorithm by defined parameters and saves it in to specified file. 
 2. DocSearchApp - Retrieves top 10 relevant documents in the corpus for each document from specified list and saves output results into specified folder.
 
@@ -25,22 +25,22 @@ Okapi BM-like algorithm (http://en.wikipedia.org/wiki/Okapi_BM25) (BM25 was used
  
 Therefore the output result contains 120 files, instead of 60 (60 files per each algorithm).
 
-During evaluation next configurations was used for our indexes:
+During evaluation next configurations were used for our indexes:
 1.	Using of stop words (stop list file exists in the project folder)
 2.	Stemming 
 3.	Maximal document count in the Term Vector was unlimited
 4.	Maximal term size in the Term Vector was unlimited
 
-For small postings list Lower Bound = 0.2, Upper Bound = 0.8
+For small postings list Lower Bound = 0.2, Upper Bound = 0.8.
 All Term Vectors were normalized in order to standardize all results.
-For medium postings list Lower Bound = 0.1, Upper Bound = 0.95
+For medium postings list Lower Bound = 0.1, Upper Bound = 0.95.
 For large postings list there were no bounds. 
 
 ===========================================================================================================================================================
 
 File createindex.properties stores next settings: 
 - maxDocSize = maximum size of documents which term frequencies are stored in the term vector creator: 0 - no limit 
-- maxTermSize = maximun size of terms in each document that are taken into account during computation of the term vector: -1 - no limit
+- maxTermSize = maximum size of terms in each document that are taken into account during computation of the term vector: -1 - no limit
 - normalize = sets whether term vectors will be normalized: true, false
 - usegzip = sets whether gzip will be used for storing and loading index: true, false
 - stemming = sets whether stemming will be used for filtering of documents: true, false
@@ -62,7 +62,7 @@ Files createindex.properties and stopList.txt should be in the same folder.
 
 File docsearch.properties stores next settings: 
 - maxDocSize = maximum size of documents which term frequencies are stored in the term vector creator: 0 - no limit 
-- maxTermSize = maximun size of terms in each document that are taken into account during computation of the term vector: -1 - no limit
+- maxTermSize = maximum size of terms in each document that are taken into account during computation of the term vector: -1 - no limit
 - normalize = sets whether term vectors will be normalized: true, false
 - usegzip = sets whether gzip will be used for storing and loading index: true, false
 - stemming = sets whether stemming will be used for filtering of documents: true, false
