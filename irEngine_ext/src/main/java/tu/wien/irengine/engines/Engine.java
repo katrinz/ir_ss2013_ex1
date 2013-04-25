@@ -81,8 +81,8 @@ public class Engine implements IEngine {
     
     private void loadTermVectorCreator(){
         Debug.debugOut("Loading term vector creator...");
-        this.configuration.getVectorCreator().addTermSet(
-                this.index.getAllTermVectors());
+        this.configuration.getVectorCreator().init(
+                this.index);
     }
 
     public void createIndex() {

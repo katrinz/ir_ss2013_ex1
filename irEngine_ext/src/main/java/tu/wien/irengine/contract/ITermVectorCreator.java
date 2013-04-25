@@ -12,12 +12,12 @@ import java.util.Collection;
 public interface ITermVectorCreator {
 
     ITermVector createVector(IDocument doc);
+    
+    double getDocDL(IDocument doc);
 
     void addDocSet(Collection<IDocument> ds);
     
-    void addTermSet(Collection<ITermVector> ds);
-
-    void addDoc(ITermVector freqVec);
+    void init(ISearchIndex index);
 
     void addDoc(IDocument doc);
 

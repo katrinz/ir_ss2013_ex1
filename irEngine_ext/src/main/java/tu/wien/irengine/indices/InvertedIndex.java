@@ -18,22 +18,25 @@ import tu.wien.irengine.utils.Debug;
  * Computes and stores an inverted index, which can be used by a search engine.
  *
  */
-public class InvertedIndex extends Object implements ISearchIndex {
+public class InvertedIndex implements ISearchIndex {
 
     private TreeMap<String, HashMap<Serializable, Double>> invertedVectors;
     private TreeMap<Serializable, ITermVector> forwardVectors;  // stores normal TermVectors for each docID
+    private TreeMap<Serializable, Double> dlVector;
 
     public InvertedIndex() {
         invertedVectors = new TreeMap<String, HashMap<Serializable, Double>>();
         forwardVectors = new TreeMap<Serializable, ITermVector>();
+        dlVector = new TreeMap<Serializable, Double>();
     }
     
     @Override
-    public void put(Serializable docId, ITermVector termVector) {
+    public void put(Serializable docId, ITermVector termVector, double dl) {
         Debug.notNull(docId, "null ID");
         Debug.notNull(termVector, "null vector");
 
         forwardVectors.put(docId, termVector);
+        dlVector.put(docId, dl);
 
         // for each term
         for (String term : termVector.termSet()) {
@@ -48,6 +51,11 @@ public class InvertedIndex extends Object implements ISearchIndex {
 
             invertedVectors.put(term, docVector);
         }
+    }
+    
+    @Override
+    public Double getDL(Serializable docId) {
+        return dlVector.get(docId);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import tu.wien.irengine.contract.IDocument;
 import tu.wien.irengine.contract.IDocumentFilter;
+import tu.wien.irengine.contract.ISearchIndex;
 import tu.wien.irengine.contract.ITermVector;
 import tu.wien.irengine.utils.Debug;
 
@@ -47,8 +48,7 @@ public class TFIDFVectorCreator extends AbstractVectorCreator {
         addDoc(temp);
     }
 
-    @Override
-    public void addDoc(ITermVector freqVec) {
+    protected void addDoc(ITermVector freqVec) {
         ITermVector temp = new TermVector();
         for (String term : freqVec.termSet()) {
             temp.put(term, 1.0);
@@ -57,11 +57,16 @@ public class TFIDFVectorCreator extends AbstractVectorCreator {
         numDocs++;
     }
 
+    /**
+     * Initializes creator from <code>index</code>
+     * 
+     * @param index Search index
+     */
     @Override
-    public void addTermSet(Collection<ITermVector> ds) {
-        Debug.notNull(ds, "docSet");
-
-        for (ITermVector tv : ds) {
+    public void init(ISearchIndex index){
+        Debug.notNull(index, "index");
+        
+        for (ITermVector tv : index.getAllTermVectors()) {
             addDoc(tv);
         }
     }
@@ -126,6 +131,10 @@ public class TFIDFVectorCreator extends AbstractVectorCreator {
 
     protected double computeMeasure(String term, double docFreq, ITermVector freqVec) {
         return freqVec.get(term) * (Math.log(numDocs / docFreq) / Math.log(2));
+    }
+    
+    public double getDocDL(IDocument doc) {
+        return this.getFrequencyTermVector(doc).size();
     }
 
     @Override

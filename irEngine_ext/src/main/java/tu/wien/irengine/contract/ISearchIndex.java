@@ -15,6 +15,8 @@ import java.util.Set;
 public interface ISearchIndex {
 
     boolean containsDocument(Serializable docId);
+    
+    Double getDL(Serializable docId);
 
     Set<Serializable> documentSet();
 
@@ -28,7 +30,7 @@ public interface ISearchIndex {
 
     void limit(double lowerBound, double upperBound);
 
-    void put(Serializable docId, ITermVector termVector);
+    void put(Serializable docId, ITermVector termVector, double dl);
 
     int size();
 

@@ -43,6 +43,7 @@ public class ArffIndexSaver implements ISearchIndexSaver {
             attr.addElement(new Attribute("termId", (FastVector) null));
             attr.addElement(new Attribute("docId", (FastVector) null));
             attr.addElement(new Attribute("value"));
+            attr.addElement(new Attribute("dl"));
 
             data = new Instances("ir", attr, 0);
 
@@ -53,8 +54,10 @@ public class ArffIndexSaver implements ISearchIndexSaver {
                     values[0] = data.attribute(0).addStringValue(term);
                     // docId
                     values[1] = data.attribute(1).addStringValue(entry.getKey().toString());
-                    // value
+                    // term freq
                     values[2] = entry.getValue();
+                    // dl value
+                    values[3] = index.getDL(entry.getKey());
                     data.add(new Instance(1.0, values));
                 }
             }

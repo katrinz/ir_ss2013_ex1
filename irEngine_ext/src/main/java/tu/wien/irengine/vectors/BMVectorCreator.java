@@ -4,9 +4,11 @@
  */
 package tu.wien.irengine.vectors;
 
+import java.util.Collection;
 import java.util.List;
 import tu.wien.irengine.contract.IDocumentFilter;
 import tu.wien.irengine.contract.ITermVector;
+import tu.wien.irengine.utils.Debug;
 
 /**
  * BM25 is a bag-of-words retrieval function that ranks a set of documents based
@@ -17,31 +19,37 @@ import tu.wien.irengine.contract.ITermVector;
  */
 public class BMVectorCreator extends TFIDFVectorCreator {
 
-    private double parameterK = 2.0;
-    private double parameterB = 0.75;
+    protected double parameterK = 2.0;
+    protected double parameterB = 0.75;
+    private double avdl;
 
     public BMVectorCreator() {
         super();
     }
 
     public BMVectorCreator(List<IDocumentFilter> filters) {
-        super();
-        this.filters.addAll(filters);
+        super(filters);
     }
 
     public BMVectorCreator(List<IDocumentFilter> filters, double k, double b) {
-        super();
-        this.filters.addAll(filters);
+        super(filters);
         this.parameterK = k;
         this.parameterB = b;
     }
 
     @Override
+    protected void addDoc(ITermVector freqVec) {
+        double dl = freqVec.size();
+        avdl = (avdl * numDocs + dl) / (numDocs + 1);
+        super.addDoc(freqVec);
+    }
+
+    @Override
     protected double computeMeasure(String term, double docFreq, ITermVector freqVec) {
         double tf = freqVec.get(term);
-        double avgdl = freqVec.avgLength();
-        double customtf = tf * (parameterK + 1) / (tf + parameterK * (1 - parameterB + parameterB * numDocs / avgdl));
-        double idf = Math.log((numDocs - docFreq + 0.5) / (docFreq + 0.5));
+        double dl = freqVec.size();
+        double customtf = tf * (parameterK + 1) / (tf + parameterK * (1 - parameterB + parameterB * dl / avdl));
+        double idf = Math.log((numDocs - docFreq + 0.5) / (docFreq + 0.5)) / Math.log(2);
         return customtf * idf;
     }
 

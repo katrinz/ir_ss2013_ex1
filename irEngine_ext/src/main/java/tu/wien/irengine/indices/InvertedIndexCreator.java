@@ -55,7 +55,8 @@ public class InvertedIndexCreator implements ISearchIndexCreator {
                 IDocument doc = DocumentTools.createDocument(path);
                 Debug.debugOut(String.format("Calculating tf-idf for document %s", doc.getId().toString()));
                 ITermVector tv = creator.createVector(doc);
-                index.put(doc.getId(), tv);
+                double dl = creator.getDocDL(doc);
+                index.put(doc.getId(), tv, dl);
             }
 
             Debug.debugOut("Creation complete");

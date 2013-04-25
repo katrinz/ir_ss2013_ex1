@@ -49,26 +49,29 @@ public class ArffIndexLoader implements ISearchIndexLoader {
 
             // define doc vector
             Map<Serializable, ITermVector> docVec = new HashMap<Serializable, ITermVector>();
+            Map<Serializable, Double> docDL = new HashMap<Serializable, Double>();
 
             while (dataIt.hasMoreElements()) {
                 // get instance
                 Instance inst = (Instance) dataIt.nextElement();
                 // get values
-                String thisTerm = inst.stringValue(0);
-                String thisDoc = inst.stringValue(1);
-                Double termValue = inst.value(2);
+                String term = inst.stringValue(0);
+                String doc = inst.stringValue(1);
+                Double termFreq = inst.value(2);
+                Double dl = inst.value(3);
 
-                ITermVector tv = docVec.get(thisDoc);
+                ITermVector tv = docVec.get(doc);
                 if (tv == null) {
                     tv = new TermVector();
                 }
-                tv.put(thisTerm, termValue);
-                docVec.put(thisDoc, tv);
+                tv.put(term, termFreq);
+                docVec.put(doc, tv);
+                docDL.put(doc, dl);
             }
 
             // put doc vec into index
             for (Entry<Serializable, ITermVector> entry : docVec.entrySet()) {
-                index.put(entry.getKey(), entry.getValue());
+                index.put(entry.getKey(), entry.getValue(), docDL.get(entry.getKey()));
             }
 
             Debug.debugOut("Initialization complete");
