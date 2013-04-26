@@ -33,6 +33,7 @@ import tu.wien.irengine.utils.CollectionsTools;
 import tu.wien.irengine.utils.Debug;
 import tu.wien.irengine.utils.DocumentTools;
 import tu.wien.irengine.utils.IOTools;
+import tu.wien.irengine.vectors.BMFVectorCreator;
 import tu.wien.irengine.vectors.BMVectorCreator;
 import tu.wien.irengine.vectors.CosineSimEvaluator;
 import tu.wien.irengine.vectors.TFIDFVectorCreator;
@@ -58,6 +59,7 @@ public class DocSearchApp {
     private static String irfunction;
     private static Double bmK;
     private static Double bmB;
+    private static String bmWeights;
 
     /**
      * @param args the command line arguments
@@ -103,6 +105,7 @@ public class DocSearchApp {
             irfunction = properties.getProperty("irfunction");
             bmK = Double.parseDouble(properties.getProperty("bmK"));
             bmB = Double.parseDouble(properties.getProperty("bmB"));
+            bmWeights = properties.getProperty("bmWeights");
 
             Debug.debugOut("Properties loaded correctly.");
         } catch (Exception e) {
@@ -127,6 +130,12 @@ public class DocSearchApp {
                 tvCreator = new BMVectorCreator(filters, bmK, bmB);
             } else {
                 tvCreator = new BMVectorCreator(filters);
+            }
+        } else if (irfunction.equalsIgnoreCase("bmf")) {
+            if (bmK != 0 || bmB != 0) {
+                tvCreator = new BMFVectorCreator(filters, bmK, bmB, bmWeights);
+            } else {
+                tvCreator = new BMFVectorCreator(filters);
             }
         } else {
             tvCreator = new TFIDFVectorCreator(filters);
